@@ -2,6 +2,7 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
+/// tab bars & bottom navigation, paginated infinite lists, OS app lifecycle observers,
 /// image memory caching, real-time FFI WebSockets, biometric authentication (FaceID/TouchID),
 /// slide/sheet route transitions, neural TTS voice configuration, background job schedulers,
 /// dynamic wallpaper color palettes, content windowing list controllers, sparkline charts,
@@ -24,6 +25,7 @@ export 'src/component/list_view.dart';
 export 'src/component/grid_view.dart';
 export 'src/component/shimmer.dart';
 export 'src/component/scroll_window.dart';
+export 'src/component/paginated_list.dart';
 export 'src/reconciler/reconciler.dart';
 
 export 'src/accessibility/semantics.dart';
@@ -33,6 +35,7 @@ export 'src/state/signal_store.dart';
 export 'src/navigation/navigator.dart';
 export 'src/navigation/search_bar.dart';
 export 'src/navigation/transitions.dart';
+export 'src/navigation/tab_bar.dart';
 export 'src/graphics/canvas.dart';
 export 'src/graphics/shaders.dart';
 export 'src/graphics/sparkline.dart';
@@ -61,6 +64,7 @@ export 'src/media/audio_engine.dart';
 export 'src/media/neural_audio.dart';
 export 'src/media/voice_config.dart';
 export 'src/platform/platform_services.dart';
+export 'src/platform/app_lifecycle.dart';
 
 export 'src/devtools/inspector.dart';
 export 'src/devtools/profiler.dart';
