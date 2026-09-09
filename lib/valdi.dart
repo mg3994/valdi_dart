@@ -2,8 +2,9 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
-/// fluid glass shaders, shimmer placeholders, neural audio streamers, isolate processing,
-/// method channel migration bridges, controlled forms, responsive layout,
+/// dynamic wallpaper color palettes, content windowing list controllers, sparkline charts,
+/// on-device vision ML inference, fluid glass shaders, shimmer placeholders, neural audio streamers,
+/// isolate processing, method channel migration bridges, controlled forms, responsive layout,
 /// reactive signals & signal stores, native routing, gestures, accessibility semantics,
 /// SQLite & secure keychain database, social auth sheets, FFI networking, system localizations,
 /// camera & Lottie sticker engines, DevTools inspector, frame profiler, hot reload, and optional Skia direct canvas rendering.
@@ -20,6 +21,7 @@ export 'src/component/flutter_widgets.dart';
 export 'src/component/list_view.dart';
 export 'src/component/grid_view.dart';
 export 'src/component/shimmer.dart';
+export 'src/component/scroll_window.dart';
 export 'src/reconciler/reconciler.dart';
 
 export 'src/accessibility/semantics.dart';
@@ -30,6 +32,7 @@ export 'src/navigation/navigator.dart';
 export 'src/navigation/search_bar.dart';
 export 'src/graphics/canvas.dart';
 export 'src/graphics/shaders.dart';
+export 'src/graphics/sparkline.dart';
 export 'src/network/http_client.dart';
 export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
@@ -40,9 +43,11 @@ export 'src/form/forms.dart';
 export 'src/plugin/valdi_plugin.dart';
 export 'src/plugin/platform_channel.dart';
 export 'src/isolate/isolate_bridge.dart';
+export 'src/ml/vision_ml.dart';
 
 export 'src/animation/animation.dart';
 export 'src/theme/material.dart';
+export 'src/theme/dynamic_color.dart';
 export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
 export 'src/media/audio_engine.dart';
