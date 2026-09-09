@@ -2,6 +2,7 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
+/// multi-line flex wrapping, zero-copy HW video texture streaming, native event streams,
 /// tab bars & bottom navigation, paginated infinite lists, OS app lifecycle observers,
 /// image memory caching, real-time FFI WebSockets, biometric authentication (FaceID/TouchID),
 /// slide/sheet route transitions, neural TTS voice configuration, background job schedulers,
@@ -17,6 +18,7 @@ export 'src/layout/yoga_node.dart';
 export 'src/layout/yoga_style.dart';
 export 'src/layout/layout_engine.dart';
 export 'src/layout/responsive.dart';
+export 'src/layout/flex_wrap.dart';
 
 export 'src/component/valdi_component.dart';
 export 'src/component/builder.dart';
@@ -41,6 +43,7 @@ export 'src/graphics/shaders.dart';
 export 'src/graphics/sparkline.dart';
 export 'src/network/http_client.dart';
 export 'src/network/websocket.dart';
+export 'src/network/event_stream.dart';
 export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
 export 'src/storage/database.dart';
@@ -60,6 +63,7 @@ export 'src/theme/dynamic_color.dart';
 export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
 export 'src/media/image_cache.dart';
+export 'src/media/video_texture.dart';
 export 'src/media/audio_engine.dart';
 export 'src/media/neural_audio.dart';
 export 'src/media/voice_config.dart';

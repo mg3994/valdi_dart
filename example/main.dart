@@ -1,60 +1,59 @@
 import 'package:valdi/valdi.dart';
 
 void main() async {
-  print('=== Valdi + DartNative Infinite Navigation Suite Showcase ===\n');
+  print('=== Valdi + DartNative Ultra Performance Showcase ===\n');
 
-  // 1. OS App Lifecycle Observer
-  print('[1] Observing OS App Lifecycle Transitions over FFI:');
-  final lifecycle = AppLifecycleObserver();
-  lifecycle.observeLifecycle((state) {
-    print('  -> App Lifecycle Transitioned to: $state');
-  });
-  print('  -> Current OS App Lifecycle State: ${lifecycle.currentState}');
-  NativeBridge().handleNativeEvent('AppLifecycle.onStateChanged', ['paused']);
-  NativeBridge().handleNativeEvent('AppLifecycle.onStateChanged', ['resumed']);
+  // 1. Zero-Copy HW Video Texture Streamer over FFI
+  print('[1] Registering Zero-Copy Hardware Video Texture Streamer:');
+  final textureStreamer = VideoTextureStreamer();
+  final textureId = await textureStreamer.registerTexture('https://cdn.valdi.native/live_4k_stream.mp4');
+  print('  -> Registered Native HW Texture ID: $textureId');
 
-  // 2. TabBar & Paginated Infinite Scroll List
-  print('\n[2] Constructing Paginated Infinite List & Adaptive TabBar:');
-  Navigator.pushNamed('/feed', () {
+  // 2. Real-time Native Bi-directional Event Stream Sockets
+  print('\n[2] Listening to Native Bi-directional Event Stream Sockets over FFI:');
+  final eventStream = ValdiEventStream<String>('device_telemetry');
+  eventStream.stream.listen((ev) => print('  -> Native Event Stream Received: "$ev"'));
+  eventStream.emit('battery_level:98%,temp:32C');
+
+  // 3. Multi-Line Flexbox Wrap Layout & UI Rendering
+  print('\n[3] Constructing Multi-Line Flexbox Wrap Layout:');
+  Navigator.pushNamed('/ultra_feed', () {
     return Column(
       children: [
         SearchAppBar(
-          title: 'Paginated Feed',
-          searchBar: SearchBar(placeholder: 'Filter feed rows...'),
+          title: 'Ultra Performance Suite',
+          searchBar: SearchBar(placeholder: 'Search ultra tags...'),
         ),
-        PaginatedListView(
-          itemCount: 8,
-          onRefresh: () async => print('  -> Pull-To-Refresh Triggered'),
-          onLoadMore: () async => print('  -> Infinite Scroll Load More Triggered'),
-          itemBuilder: (i) => Text('Paginated Feed Row #$i'),
-        ),
-        TabBar(
-          selectedIndex: 1,
-          tabs: const [
-            BottomNavigationBarItem(label: 'Home', icon: 'home'),
-            BottomNavigationBarItem(label: 'Feed', icon: 'feed', badge: '12'),
-            BottomNavigationBarItem(label: 'Settings', icon: 'settings'),
+        Wrap(
+          direction: FlexDirection.row,
+          alignment: JustifyContent.spaceAround,
+          children: [
+            Container(padding: const EdgeValues.all(8), color: '#007AFF', child: Text('Chip #1')),
+            Container(padding: const EdgeValues.all(8), color: '#34C759', child: Text('Chip #2')),
+            Container(padding: const EdgeValues.all(8), color: '#FF9500', child: Text('Chip #3')),
           ],
-          onTabSelected: (idx) => print('  -> Tab Selected: Index $idx'),
         ),
+        VideoPlayer(url: 'https://cdn.valdi.native/live_4k_stream.mp4'),
       ],
     );
   });
 
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  // 3. Dual-Mode Rendering Pipeline
+  // 4. Dual-Mode Rendering Pipeline
   final controller = ValdiRenderController();
 
-  print('\n[3.1] Rendering Paginated Suite in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Ultra Suite in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
 
-  print('\n[3.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
+  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
   controller.setRenderBackend(RenderBackend.skiaCanvas);
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  print('\n=== Infinite Navigation Suite Showcase Completed Successfully ===');
+  await textureStreamer.releaseTexture();
+  await eventStream.close();
+  print('\n=== Ultra Performance Showcase Completed Successfully ===');
 }
