@@ -11,74 +11,66 @@ class ChartPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-class AddCounterAction extends Action {
-  AddCounterAction(int delta) : super('ADD', delta);
-}
+int backgroundComputeTask(int num) => num * 10;
 
 void main() async {
-  print('=== Valdi + DartNative DevTools & Profiler Showcase ===\n');
+  print('=== Valdi + DartNative Enterprise Capabilities Showcase ===\n');
 
-  // 1. DevTools Logging & Hot Reload State Preservation
-  ValdiDevTools.log('Framework initialized with DevTools suite.');
-  HotReloadManager.preserveState('app_session_id', 'session_778899');
-  print('[1] DevTools Logging & Hot Reload State Preservation:');
-  print('  -> DevTools Log: ${ValdiDevTools.logs.first}');
-  print('  -> Restored Hot Reload State: ${HotReloadManager.restoreState('app_session_id')}');
+  // 1. Off-Main-Thread Isolate Bridge
+  print('[1] Background Isolate Processing:');
+  final computeResult = await ValdiIsolateBridge.compute(backgroundComputeTask, 5);
+  print('  -> Background Isolate Result: $computeResult');
 
-  // 2. SignalStore & FFI Localizations
-  final store = SignalStore<int>(
-    initialState: 100,
-    reducer: (state, action) => action.type == 'ADD' ? state + (action.payload as int) : state,
-  );
-  store.dispatch(AddCounterAction(25));
+  // 2. Flutter MethodChannel Migration Bridge
+  print('\n[2] Flutter Platform Channel Migration Bridge:');
+  final legacyChannel = ValdiPlatformChannel('flutter.plugins.com/share');
+  final legacyRes = await legacyChannel.invokeMethod<String>('sharePayload', ['Hello Valdi']);
+  print('  -> MethodChannel Invocation Result: $legacyRes');
 
-  final i18n = ValdiLocalizations(translations: {
-    'en': {'app_title': 'Valdi Enterprise Native Suite'},
-  });
+  // 3. Forms, TextField & Responsive Layout
+  print('\n[3] Form Validation, Controlled TextField, & Responsive Layout:');
+  final inputController = TextEditingController(text: 'Valdi Developer');
 
-  // 3. UI Construction & Inspection
   Navigator.pushNamed('/dashboard', () {
-    return Semantics(
-      label: 'Main Dashboard',
-      child: Column(
-        children: [
-          SearchAppBar(
-            title: i18n.translate('app_title'),
-            searchBar: SearchBar(placeholder: 'Search features...'),
-          ),
-          Text('Store State: ${store.state}'),
-          CustomPaint(
-            painter: ChartPainter(),
-            style: YogaStyle(width: 300, height: 100),
-          ),
-        ],
+    return ResponsiveLayout(
+      mobile: Form(
+        child: Column(
+          children: [
+            SearchAppBar(
+              title: 'Valdi Enterprise Suite',
+              searchBar: SearchBar(placeholder: 'Search features...'),
+            ),
+            TextField(
+              controller: inputController,
+              placeholder: 'User Profile Name',
+            ),
+            LayoutBuilder(
+              builder: (constraints) => Text('Container Width: ${constraints.maxWidth}'),
+            ),
+            CustomPaint(
+              painter: ChartPainter(),
+              style: YogaStyle(width: 300, height: 100),
+            ),
+          ],
+        ),
       ),
     );
   });
 
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  print('\n[2] DevTools Inspector Tree Serialization:');
-  final treeMap = ValdiDevTools.inspectComponent(rootWidget);
-  print('  -> Serialized Tree Node: $treeMap');
-
-  // 4. Dual-Mode Rendering & Profiler Metrics Recording
+  // 4. Dual-Mode Rendering Pipeline
   final controller = ValdiRenderController();
 
-  final stopwatch = Stopwatch()..start();
+  print('\n[4.1] Rendering Suite in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
-  stopwatch.stop();
+  print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
 
-  ValdiProfiler.recordFrameMetrics(RenderMetrics(
-    layoutTimeMicros: 120,
-    reconcileTimeMicros: 85,
-    renderTimeMicros: stopwatch.elapsedMicroseconds,
-    viewCount: ZeroForkManager().activeNativeViews.length,
-  ));
+  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
+  controller.setRenderBackend(RenderBackend.skiaCanvas);
+  controller.render(rootWidget);
+  print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  print('\n[3] ValdiProfiler Telemetry Metrics:');
-  print('  -> Recorded Metrics: ${ValdiProfiler.latestMetrics}');
-
-  print('\n=== DevTools & Profiler Showcase Completed Successfully ===');
+  print('\n=== Enterprise Capabilities Showcase Completed Successfully ===');
 }

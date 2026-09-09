@@ -2,6 +2,7 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
+/// background isolate execution, method channel migration bridges, controlled forms, responsive layout,
 /// reactive signals & signal stores, native routing, gestures, accessibility semantics,
 /// SQLite & secure keychain database, social auth sheets, FFI networking, system localizations,
 /// camera & Lottie sticker engines, DevTools inspector, frame profiler, hot reload, and optional Skia direct canvas rendering.
@@ -10,6 +11,7 @@ library valdi;
 export 'src/layout/yoga_node.dart';
 export 'src/layout/yoga_style.dart';
 export 'src/layout/layout_engine.dart';
+export 'src/layout/responsive.dart';
 
 export 'src/component/valdi_component.dart';
 export 'src/component/builder.dart';
@@ -30,7 +32,11 @@ export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
 export 'src/storage/database.dart';
 export 'src/auth/auth_widgets.dart';
+export 'src/form/forms.dart';
+
 export 'src/plugin/valdi_plugin.dart';
+export 'src/plugin/platform_channel.dart';
+export 'src/isolate/isolate_bridge.dart';
 
 export 'src/animation/animation.dart';
 export 'src/theme/material.dart';
