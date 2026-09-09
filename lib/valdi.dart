@@ -4,7 +4,7 @@
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
 /// reactive signals & signal stores, native routing, gestures, accessibility semantics,
 /// SQLite & secure keychain database, social auth sheets, FFI networking, system localizations,
-/// camera & Lottie sticker engines, and optional Skia direct canvas rendering.
+/// camera & Lottie sticker engines, DevTools inspector, frame profiler, hot reload, and optional Skia direct canvas rendering.
 library valdi;
 
 export 'src/layout/yoga_node.dart';
@@ -38,6 +38,10 @@ export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
 export 'src/media/audio_engine.dart';
 export 'src/platform/platform_services.dart';
+
+export 'src/devtools/inspector.dart';
+export 'src/devtools/profiler.dart';
+export 'src/devtools/hot_reload.dart';
 
 export 'src/bridge/zero_fork_manager.dart';
 export 'src/bridge/native_bridge.dart';

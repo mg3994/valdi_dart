@@ -16,86 +16,69 @@ class AddCounterAction extends Action {
 }
 
 void main() async {
-  print('=== Valdi + DartNative Enterprise Architecture Showcase ===\n');
+  print('=== Valdi + DartNative DevTools & Profiler Showcase ===\n');
 
-  // 1. SignalStore State Management
-  print('[1] Centralized SignalStore State Management:');
+  // 1. DevTools Logging & Hot Reload State Preservation
+  ValdiDevTools.log('Framework initialized with DevTools suite.');
+  HotReloadManager.preserveState('app_session_id', 'session_778899');
+  print('[1] DevTools Logging & Hot Reload State Preservation:');
+  print('  -> DevTools Log: ${ValdiDevTools.logs.first}');
+  print('  -> Restored Hot Reload State: ${HotReloadManager.restoreState('app_session_id')}');
+
+  // 2. SignalStore & FFI Localizations
   final store = SignalStore<int>(
     initialState: 100,
-    reducer: (state, action) {
-      if (action.type == 'ADD') {
-        return state + (action.payload as int);
-      }
-      return state;
-    },
+    reducer: (state, action) => action.type == 'ADD' ? state + (action.payload as int) : state,
   );
-  store.addListener((st) => print('  -> SignalStore State Updated: $st'));
-  store.dispatch(AddCounterAction(50));
+  store.dispatch(AddCounterAction(25));
 
-  // 2. Direct FFI HTTP Client & System i18n Localizations
-  print('\n[2] Direct FFI HTTP Client & System i18n Bridge:');
-  final httpClient = ValdiHttpClient();
-  final httpRes = await httpClient.get('https://api.valdi.native/feed');
-  print('FFI HTTP Response Status: ${httpRes.statusCode}');
+  final i18n = ValdiLocalizations(translations: {
+    'en': {'app_title': 'Valdi Enterprise Native Suite'},
+  });
 
-  final i18n = ValdiLocalizations(
-    translations: {
-      'en': {'app_title': 'Valdi Enterprise Native Suite'},
-      'es': {'app_title': 'Suite Empresarial Valdi'},
-    },
-  );
-  await i18n.fetchSystemLocale();
-  print('Translated Header (${i18n.currentLocale}): ${i18n.translate('app_title')}');
-
-  // 3. Accessibility Semantics, Interactive Gestures, & Navigation
-  print('\n[3] Accessibility Semantics, Interactive Gestures, & Native Navigation:');
-  Navigator.pushNamed('/enterprise', () {
+  // 3. UI Construction & Inspection
+  Navigator.pushNamed('/dashboard', () {
     return Semantics(
       label: 'Main Dashboard',
-      hint: 'Contains enterprise native controls',
-      child: GestureDetector(
-        onTap: () => print('  -> Accessibility Container Tapped!'),
-        child: Column(
-          children: [
-            SearchAppBar(
-              title: i18n.translate('app_title'),
-              searchBar: SearchBar(placeholder: 'Search enterprise features...'),
-            ),
-            AppleSignInButton(
-              onSuccess: (token) => print('  -> Apple Auth Token: $token'),
-            ),
-            MasonryGridView(
-              crossAxisCount: 2,
-              itemCount: 2,
-              itemBuilder: (i) => Container(
-                height: 120,
-                child: Text('Masonry Tile #$i'),
-              ),
-            ),
-            CustomPaint(
-              painter: ChartPainter(),
-              style: YogaStyle(width: 300, height: 100),
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          SearchAppBar(
+            title: i18n.translate('app_title'),
+            searchBar: SearchBar(placeholder: 'Search features...'),
+          ),
+          Text('Store State: ${store.state}'),
+          CustomPaint(
+            painter: ChartPainter(),
+            style: YogaStyle(width: 300, height: 100),
+          ),
+        ],
       ),
     );
   });
 
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  // 4. Dual-Mode Rendering Pipeline
+  print('\n[2] DevTools Inspector Tree Serialization:');
+  final treeMap = ValdiDevTools.inspectComponent(rootWidget);
+  print('  -> Serialized Tree Node: $treeMap');
+
+  // 4. Dual-Mode Rendering & Profiler Metrics Recording
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Enterprise Suite in Primary Native View Mode (Zero-Fork Flutter):');
+  final stopwatch = Stopwatch()..start();
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
-  print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
+  stopwatch.stop();
 
-  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
-  controller.setRenderBackend(RenderBackend.skiaCanvas);
-  controller.render(rootWidget);
-  print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
+  ValdiProfiler.recordFrameMetrics(RenderMetrics(
+    layoutTimeMicros: 120,
+    reconcileTimeMicros: 85,
+    renderTimeMicros: stopwatch.elapsedMicroseconds,
+    viewCount: ZeroForkManager().activeNativeViews.length,
+  ));
 
-  print('\n=== Enterprise Architecture Showcase Completed Successfully ===');
+  print('\n[3] ValdiProfiler Telemetry Metrics:');
+  print('  -> Recorded Metrics: ${ValdiProfiler.latestMetrics}');
+
+  print('\n=== DevTools & Profiler Showcase Completed Successfully ===');
 }
