@@ -1,0 +1,15 @@
+name: valdi
+description: A declarative, cross-platform UI framework in Dart inspired by Valdi and DartNative with zero-fork Flutter integration, Yoga flexbox layout, and optional Skia rendering.
+version: 1.0.0
+homepage: https://github.com/example/valdi
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  ffi: ^2.1.0
+  meta: ^1.9.1
+  vector_math: ^2.1.4
+
+dev_dependencies:
+  test: ^1.24.0
