@@ -1,38 +1,52 @@
 # Valdi Dart Framework (`valdi`)
 
-A declarative, cross-platform UI framework in Dart combining Snapchat's **Valdi** and **DartNative** architectural principles, featuring **zero-fork Flutter integration** (inspired by Matej Knopp's `flutter_zero`), **Yoga flexbox layout engine**, dynamic FFI interop, reactive signal state management, native navigation, custom canvas graphics, and an **optional Skia rendering backend**.
+A declarative, cross-platform UI framework in Dart combining Snapchat's **Valdi** and **DartNative** architectural principles, featuring **zero-fork Flutter integration** (inspired by Matej Knopp's `flutter_zero`), **Yoga flexbox layout engine**, dynamic FFI interop, reactive signal state management, native navigation, custom canvas graphics, animations, Material 3 / LiquidGlass materials, media views, platform services over FFI, and an **optional Skia direct canvas rendering backend**.
 
 ---
 
-## Architectural Foundations & DartNative Alignment
+## Architectural Foundations & Capabilities Map
 
-1. **Flutter-Compatible Layout Vocabulary**:
-   - High-level layout widgets matching Flutter's API: `Row`, `Column`, `Stack`, `Positioned`, `Expanded`, `SizedBox`, `Container`, `Padding`.
-   - Windowed high-performance list view (`ListView`, `ListView.builder`) mapped to native `UITableView` / `RecyclerView` backings.
+1. **Flutter Layout & Core Vocabulary**:
+   - Layout primitives: `Row`, `Column`, `Stack`, `Positioned`, `Expanded`, `SizedBox`, `Container`, `Padding`.
+   - Windowed high-performance native list (`ListView`, `ListView.builder`) backed by native `UITableView` / `RecyclerView`.
 
-2. **Reactive Signal & Provided State Management (DartNative style)**:
-   - Zero-boilerplate reactive signals (`Signal<T>`) and watcher dependency tracking.
-   - Subtree dependency context injection (`Provided<T>`) without requiring complex provider scopes or boilerplate base classes.
+2. **Animations & Shared Element Transitions**:
+   - Frame and status-driven animations (`AnimationController`, `Tween`).
+   - Shared element page transitions (`Hero`) matching DartNative Hero stories pattern.
 
-3. **Native Navigator & Page Transitions**:
-   - Native route stack management (`Navigator`, `Route`, `MaterialPageRoute`) using OS native page transitions and back gestures.
+3. **Material 3 & Modern Native Materials**:
+   - iOS 26 / Material 3 blurred glass material (`LiquidGlass`).
+   - Material 3 badge system (`M3Badge`) and themes (`MaterialTheme`).
 
-4. **Native Canvas & CustomPainter Engine**:
-   - `CustomPainter`, `Canvas`, `Paint`, `Path`, and `Color` mapping directly to CoreGraphics, Android Canvas, or Skia.
+4. **Native Media & Map Views**:
+   - `VideoPlayer` (backed by AVPlayer / ExoPlayer).
+   - `LottieView` (backed by native lottie-ios / lottie-android engines).
+   - `CameraView` (backed by AVFoundation / CameraX).
+   - `MapView` (backed by Google Maps SDK / MKMapView).
 
-5. **Yoga Flexbox Layout Engine**:
-   - W3C-compliant layout solver (`YogaNode`, `YogaStyle`, `LayoutEngine`) with configurable native C `libyoga` bindings and pure Dart solver fallback.
+5. **Platform Services & FFI Integration**:
+   - Authentication (`AuthService`: Sign in with Apple & Google Credential Manager over FFI).
+   - Push & Local Notifications (`NotificationManager` over FFI).
+   - Neural Text-to-Speech (`TextToSpeechEngine` over ONNX / FFI).
+   - Fast Key-Value & Relational Storage (`ValdiStorage`).
+   - Dynamic Plugin Bridge (`ValdiPlugin`).
 
-6. **Zero-Fork Flutter Native View Integration (`flutter_zero` style)**:
-   - Direct native view creation and lifecycle management (`ZeroForkManager`, `NativeViewHandle`) bypassing standard Flutter platform view overhead and engine modifications.
+6. **Reactive Signal State Management**:
+   - Zero-boilerplate reactive state (`Signal<T>`) and watcher dependency tracking.
+   - Subtree context dependency injection (`Provided<T>`).
 
-7. **Direct FFI Storage & Dynamic Interop Bridge**:
-   - Low-latency FFI Key-Value storage (`ValdiStorage`) for SharedPreferences / Keychain / SQLite.
-   - Dynamic bi-directional C/C++ FFI dispatch bridge (`NativeBridge`, `ValdiPlugin`) for plugin ecosystems.
+7. **Native Navigator & Page Transitions**:
+   - Route stack manager (`Navigator`, `Route`, `MaterialPageRoute`).
 
-8. **Dual-Mode Rendering Pipeline (Native Views & Optional Skia)**:
-   - **Native Views Mode (Default / Valdi style)**: Translates component patches directly into native UI views (UIView / Android View).
-   - **Optional Skia Canvas Mode (DartNative style)**: Direct-to-Skia surface rendering via recorded draw commands (`SkiaRenderer`, `SkiaDrawCommand`), dynamically togglable via `ValdiRenderController`.
+8. **Yoga Flexbox Engine**:
+   - W3C-compliant layout solver (`YogaNode`, `YogaStyle`, `LayoutEngine`) with optional native C `libyoga` bindings.
+
+9. **Zero-Fork Flutter Engine Integration (`flutter_zero` style)**:
+   - Direct native view creation and lifecycle management (`ZeroForkManager`, `NativeViewHandle`) without Flutter engine modifications.
+
+10. **Dual-Mode Rendering Pipeline (Native Views & Optional Skia Canvas)**:
+    - **Native Views Mode (Default / Valdi style)**: Translates component patches directly into native UI views.
+    - **Optional Skia Canvas Mode (DartNative style)**: Direct-to-Skia surface rendering via recorded draw commands (`SkiaRenderer`), dynamically togglable via `ValdiRenderController`.
 
 ---
 
@@ -41,37 +55,46 @@ A declarative, cross-platform UI framework in Dart combining Snapchat's **Valdi*
 ```dart
 import 'package:valdi/valdi.dart';
 
-// 1. Reactive State via Signals
 final counterSignal = Signal<int>(0);
 
-class CounterScreen extends ValdiComponent {
+class HomeScreen extends ValdiComponent {
   @override
   ValdiComponent build() {
-    return Column(
-      children: [
-        Text('Count: ${counterSignal.value}'),
-        Button(
-          label: 'Increment',
-          onPressed: () => counterSignal.update((c) => c + 1),
-        ),
-      ],
+    return LiquidGlass(
+      child: Column(
+        children: [
+          Hero(
+            tag: 'profile_avatar',
+            child: Container(width: 80, height: 80, color: '#007AFF'),
+          ),
+          Text('Count: ${counterSignal.value}'),
+          Button(
+            label: 'Increment',
+            onPressed: () => counterSignal.update((c) => c + 1),
+          ),
+          VideoPlayer(url: 'https://cdn.example.com/video.mp4'),
+        ],
+      ),
     );
   }
 }
 
-void main() {
+void main() async {
   final controller = ValdiRenderController();
 
-  // Push Route to Native Navigator
-  Navigator.pushNamed('/home', () => CounterScreen());
+  Navigator.pushNamed('/home', () => HomeScreen());
 
-  // Render via Primary Native View Backend (Zero-Fork)
+  // Default: Native Views Backend (Valdi + Zero-Fork Flutter)
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(Navigator.currentRoute!.buildPage());
 
-  // Switch to Optional Skia Canvas Backend
+  // Optional Switch: Skia Direct Canvas Backend (DartNative Style)
   controller.setRenderBackend(RenderBackend.skiaCanvas);
   controller.render(Navigator.currentRoute!.buildPage());
+
+  // Platform capabilities over FFI
+  final auth = AuthService();
+  await auth.signInWithApple();
 }
 ```
 
@@ -85,7 +108,7 @@ Run unit and integration tests:
 dart test
 ```
 
-Run the example application:
+Run the demonstration application:
 
 ```bash
 dart run example/main.dart

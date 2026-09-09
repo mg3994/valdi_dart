@@ -5,13 +5,13 @@ typedef SignalListener<T> = void Function(T value);
 /// Reactive Signal store inspired by DartNative signal state management.
 class Signal<T> {
   T _value;
-  final Set<SignalListener<T>> _listeners = {};
+  final Set<void Function(dynamic)> _listeners = {};
 
   Signal(T initialValue) : _value = initialValue;
 
   T get value {
     if (_activeWatcher != null) {
-      _listeners.add(_activeWatcher as SignalListener<T>);
+      _listeners.add(_activeWatcher!);
     }
     return _value;
   }
@@ -28,7 +28,7 @@ class Signal<T> {
   }
 
   void addListener(SignalListener<T> listener) {
-    _listeners.add(listener);
+    _listeners.add((val) => listener(val as T));
   }
 
   void removeListener(SignalListener<T> listener) {
@@ -36,16 +36,16 @@ class Signal<T> {
   }
 
   void notifyListeners() {
-    final listenersList = List<SignalListener<T>>.from(_listeners);
+    final listenersList = List<void Function(dynamic)>.from(_listeners);
     for (final listener in listenersList) {
       listener(_value);
     }
   }
 
-  static dynamic _activeWatcher;
+  static void Function(dynamic)? _activeWatcher;
 
   /// Helper to record dependencies during `watch` calls.
-  static R track<R>(SignalListener<dynamic> watcher, R Function() computation) {
+  static R track<R>(void Function(dynamic) watcher, R Function() computation) {
     final prevWatcher = _activeWatcher;
     _activeWatcher = watcher;
     try {

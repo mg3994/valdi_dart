@@ -2,7 +2,8 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
-/// reactive signals, native routing, custom canvas graphics, and optional Skia direct canvas rendering.
+/// reactive signals, native routing, custom canvas graphics, animations, Material 3, media views,
+/// platform services, and optional Skia direct canvas rendering.
 library valdi;
 
 export 'src/layout/yoga_node.dart';
@@ -19,6 +20,11 @@ export 'src/navigation/navigator.dart';
 export 'src/graphics/canvas.dart';
 export 'src/storage/valdi_storage.dart';
 export 'src/plugin/valdi_plugin.dart';
+
+export 'src/animation/animation.dart';
+export 'src/theme/material.dart';
+export 'src/media/media_widgets.dart';
+export 'src/platform/platform_services.dart';
 
 export 'src/bridge/zero_fork_manager.dart';
 export 'src/bridge/native_bridge.dart';

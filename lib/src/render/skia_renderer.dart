@@ -27,11 +27,18 @@ class SkiaRenderer {
   void renderFromPatches(List<RenderPatch> patches) {
     _drawCommands.clear();
     for (final patch in patches) {
-      if (patch.type == PatchType.create || patch.type == PatchType.update) {
-        final layout = patch.layout;
-        if (layout == null) continue;
+      _processPatch(patch);
+    }
+  }
 
-        if (patch.componentType == 'View' || patch.componentType == 'Button') {
+  void _processPatch(RenderPatch patch) {
+    if (patch.type == PatchType.create || patch.type == PatchType.update) {
+      final layout = patch.layout;
+      if (layout != null) {
+        if (patch.componentType == 'View' ||
+            patch.componentType == 'Button' ||
+            patch.componentType == 'Container' ||
+            patch.componentType == 'LiquidGlass') {
           _drawCommands.add(SkiaDrawCommand(
             commandType: 'drawRect',
             rect: layout,
@@ -60,6 +67,10 @@ class SkiaRenderer {
           ));
         }
       }
+    }
+
+    for (final childPatch in patch.childPatches) {
+      _processPatch(childPatch);
     }
   }
 

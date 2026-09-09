@@ -51,7 +51,7 @@ class YogaNode {
     children.clear();
   }
 
-  /// Calculates the layout for this node and its children given parent constraints.
+  /// Calculates the layout for this node and its children given parent constraints without mutating style sizes.
   void calculateLayout({double? parentWidth, double? parentHeight}) {
     final computedWidth = style.width ?? parentWidth ?? 0.0;
     final computedHeight = style.height ?? parentHeight ?? 0.0;
@@ -100,7 +100,6 @@ class YogaNode {
           offsetMain += remainingSpace;
           break;
         case JustifyContent.spaceBetween:
-          // distributed during iteration
           break;
         case JustifyContent.spaceAround:
           offsetMain += remainingSpace / (layoutChildren.length * 2);
@@ -163,9 +162,6 @@ class YogaNode {
 
       final childLeft = isRow ? offsetMain : crossOffset;
       final childTop = isRow ? crossOffset : offsetMain;
-
-      child.style.width = childWidth;
-      child.style.height = childHeight;
 
       child.calculateLayout(parentWidth: childWidth, parentHeight: childHeight);
 

@@ -12,9 +12,9 @@ class ChartPainter extends CustomPainter {
 }
 
 void main() async {
-  print('=== Valdi + DartNative Extended Architecture Demo ===\n');
+  print('=== Valdi + DartNative Comprehensive Showcase ===\n');
 
-  // 1. Reactive Signal State
+  // 1. Reactive Signal State Management
   final counterSignal = Signal<int>(10);
   print('[1] Reactive Signals: Initial Value = ${counterSignal.value}');
   counterSignal.addListener((val) {
@@ -22,64 +22,76 @@ void main() async {
   });
   counterSignal.value = 25;
 
-  // 2. Provided Dependency Context
-  Provided.inject<String>('https://api.valdi.native');
-  print('\n[2] Provided Context: API Base URL = ${Provided.get<String>()}');
+  // 2. Animations & Hero Transition
+  print('\n[2] Animation Controller & Hero Transitions:');
+  final animController = AnimationController(durationSeconds: 0.3);
+  animController.addListener(() {
+    print('  -> Animation Frame Value: ${animController.value}');
+  });
+  animController.forward();
 
-  // 3. Native Navigator & Routes
-  print('\n[3] Native Navigator Routing:');
+  // 3. Native Navigator & Advanced Widgets (LiquidGlass, VideoPlayer, Hero, Lottie)
+  print('\n[3] Native Navigator Routing & Advanced UI Components:');
   Navigator.pushNamed('/dashboard', () {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(child: Text('Navigation Bar Title')),
-          ],
-        ),
-        Stack(
-          children: [
-            Container(color: '#1C1C1E', width: 375, height: 200),
-            Positioned(
-              left: 20,
-              top: 20,
-              child: Text('Overlay Banner', color: '#FFFFFF'),
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        CustomPaint(
-          painter: ChartPainter(),
-          style: YogaStyle(width: 300, height: 150),
-        ),
-        ListView.builder(
-          itemCount: 3,
-          itemBuilder: (i) => Text('Fast Native List Row #$i'),
-        ),
-      ],
+    return LiquidGlass(
+      tintColor: '#ffffff44',
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: M3Badge(
+                  label: 'NEW',
+                  child: Text('Navigation Header'),
+                ),
+              ),
+            ],
+          ),
+          Hero(
+            tag: 'profile_avatar',
+            child: Container(width: 80, height: 80, color: '#007AFF'),
+          ),
+          VideoPlayer(url: 'https://cdn.valdi.native/sample.mp4'),
+          LottieView(assetPath: 'assets/lottie_success.json'),
+          MapView(latitude: 37.7749, longitude: -122.4194),
+          CustomPaint(
+            painter: ChartPainter(),
+            style: YogaStyle(width: 300, height: 100),
+          ),
+          ListView.builder(
+            itemCount: 2,
+            itemBuilder: (i) => Text('Native Row Item #$i'),
+          ),
+        ],
+      ),
     );
   });
 
-  print('Current Route: ${Navigator.currentRoute?.name}');
+  print('Current Active Route: ${Navigator.currentRoute?.name}');
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  // 4. Dual-Mode Rendering Pipeline
+  // 4. Dual-Mode Rendering (Native Views Default + Optional Skia Backend Switch)
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Dashboard in Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Dashboard in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
-  print('Native View Count: ${ZeroForkManager().activeNativeViews.length}');
+  print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
 
-  print('\n[4.2] Switching to Optional Skia Direct Canvas Backend (DartNative Style):');
+  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
   controller.setRenderBackend(RenderBackend.skiaCanvas);
   controller.render(rootWidget);
-  print('Skia Draw Commands Recorded: ${controller.skiaRenderer.recordedCommands.length}');
+  print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  // 5. Direct FFI Key-Value Storage
-  print('\n[5] Direct FFI Storage Execution:');
-  final storage = ValdiStorage();
-  await storage.setString('session_token', 'valdi_token_9988');
-  print('Read Token from FFI Storage: ${storage.getString('session_token')}');
+  // 5. Platform Capabilities Services over FFI (Notifications & AuthService)
+  print('\n[5] Platform Capabilities Services over Dynamic FFI Bridge:');
+  final notifications = NotificationManager();
+  await notifications.requestPermissions();
+  await notifications.showLocalNotification('Valdi Framework', 'Welcome to Valdi Cross-Platform Engine!');
 
-  print('\n=== Extended Demo Completed Successfully ===');
+  final auth = AuthService();
+  final authResult = await auth.signInWithApple();
+  print('Apple Sign-In Response over FFI: $authResult');
+
+  print('\n=== Comprehensive Showcase Completed Successfully ===');
 }
