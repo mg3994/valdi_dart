@@ -1,108 +1,78 @@
 # Valdi Dart Framework (`valdi`)
 
-A declarative, cross-platform UI framework in Dart inspired by Snapchat's **Valdi** and **DartNative**, featuring **zero-fork Flutter integration** (inspired by Matej Knopp's `flutter_zero`), **Yoga flexbox layout engine**, dynamic FFI interop, and an **optional Skia rendering backend**.
+A declarative, cross-platform UI framework in Dart combining Snapchat's **Valdi** and **DartNative** architectural principles, featuring **zero-fork Flutter integration** (inspired by Matej Knopp's `flutter_zero`), **Yoga flexbox layout engine**, dynamic FFI interop, reactive signal state management, native navigation, custom canvas graphics, and an **optional Skia rendering backend**.
 
 ---
 
-## Key Features & Architectural Foundations
+## Architectural Foundations & DartNative Alignment
 
-1. **Valdi-Inspired Declarative Paradigm**:
-   - Write UI components in pure Dart using intuitive declarative primitives (`View`, `Text`, `Image`, `Button`, `ScrollView`, `StatefulComponent`).
-   - Virtual DOM tree diffing and reconciler (`Reconciler`) generating minimal patches (`RenderPatch`) for state updates.
+1. **Flutter-Compatible Layout Vocabulary**:
+   - High-level layout widgets matching Flutter's API: `Row`, `Column`, `Stack`, `Positioned`, `Expanded`, `SizedBox`, `Container`, `Padding`.
+   - Windowed high-performance list view (`ListView`, `ListView.builder`) mapped to native `UITableView` / `RecyclerView` backings.
 
-2. **Yoga Flexbox Layout Engine**:
-   - Built-in Flexbox solver (`YogaNode`, `YogaStyle`, `LayoutEngine`) adhering to W3C Flexbox specifications.
-   - Configurable C-FFI bindings to native `libyoga` with automatic fallback to pure Dart flexbox layout calculation.
+2. **Reactive Signal & Provided State Management (DartNative style)**:
+   - Zero-boilerplate reactive signals (`Signal<T>`) and watcher dependency tracking.
+   - Subtree dependency context injection (`Provided<T>`) without requiring complex provider scopes or boilerplate base classes.
 
-3. **Zero-Fork Flutter Native View Integration (`flutter_zero` style)**:
-   - Direct native view creation and lifecycle management (`ZeroForkManager`, `NativeViewHandle`) bypassing standard Flutter platform view overhead and without requiring custom Flutter engine forks.
+3. **Native Navigator & Page Transitions**:
+   - Native route stack management (`Navigator`, `Route`, `MaterialPageRoute`) using OS native page transitions and back gestures.
 
-4. **DartNative Bi-Directional Interop Bridge**:
-   - Dynamic C/C++ FFI dispatch bridge (`NativeBridge`) for direct bi-directional native host platform calls (ObjC/Swift on iOS, JNI/Kotlin on Android).
+4. **Native Canvas & CustomPainter Engine**:
+   - `CustomPainter`, `Canvas`, `Paint`, `Path`, and `Color` mapping directly to CoreGraphics, Android Canvas, or Skia.
 
-5. **Dual-Mode Rendering Engine with Optional Skia Backend**:
-   - **Native Views Mode (Default / Valdi style)**: Translates component patches directly into native UI views (UIView / Android View) for maximum native platform performance and accessibility.
-   - **Optional Skia Canvas Mode (DartNative style)**: Directly draws UI nodes to a Skia canvas surface via recorded draw commands (`SkiaRenderer`, `SkiaDrawCommand`), configurable dynamically at runtime via `ValdiRenderController`.
+5. **Yoga Flexbox Layout Engine**:
+   - W3C-compliant layout solver (`YogaNode`, `YogaStyle`, `LayoutEngine`) with configurable native C `libyoga` bindings and pure Dart solver fallback.
 
----
+6. **Zero-Fork Flutter Native View Integration (`flutter_zero` style)**:
+   - Direct native view creation and lifecycle management (`ZeroForkManager`, `NativeViewHandle`) bypassing standard Flutter platform view overhead and engine modifications.
 
-## Directory Architecture
+7. **Direct FFI Storage & Dynamic Interop Bridge**:
+   - Low-latency FFI Key-Value storage (`ValdiStorage`) for SharedPreferences / Keychain / SQLite.
+   - Dynamic bi-directional C/C++ FFI dispatch bridge (`NativeBridge`, `ValdiPlugin`) for plugin ecosystems.
 
-```
-valdi/
-├── lib/
-│   ├── valdi.dart                           # Main library export file
-│   └── src/
-│       ├── layout/
-│       │   ├── yoga_style.dart              # Flexbox style definitions and enums
-│       │   ├── yoga_node.dart               # Yoga tree node & layout solver
-│       │   └── layout_engine.dart           # High-level layout engine & native C-FFI
-│       ├── component/
-│       │   └── valdi_component.dart         # ValdiComponent, View, Text, Image, Button, etc.
-│       ├── reconciler/
-│       │   └── reconciler.dart              # Virtual tree reconciliation & patches
-│       ├── bridge/
-│       │   ├── zero_fork_manager.dart       # Zero-fork native platform view manager
-│       │   └── native_bridge.dart           # Dynamic FFI interop bridge (DartNative style)
-│       └── render/
-│           ├── native_renderer.dart         # Native platform view renderer
-│           ├── skia_renderer.dart           # Direct Skia canvas renderer
-│           └── valdi_render_controller.dart # Master dual-mode rendering controller
-├── example/
-│   └── main.dart                            # Demonstration application
-└── test/
-    ├── layout_test.dart                     # Yoga flexbox solver tests
-    ├── reconciler_test.dart                 # Virtual tree diffing & patch tests
-    └── bridge_render_test.dart              # Native view bridge & Skia switch tests
-```
+8. **Dual-Mode Rendering Pipeline (Native Views & Optional Skia)**:
+   - **Native Views Mode (Default / Valdi style)**: Translates component patches directly into native UI views (UIView / Android View).
+   - **Optional Skia Canvas Mode (DartNative style)**: Direct-to-Skia surface rendering via recorded draw commands (`SkiaRenderer`, `SkiaDrawCommand`), dynamically togglable via `ValdiRenderController`.
 
 ---
 
-## Getting Started & Usage
-
-### 1. Basic Component Construction
+## Code Example
 
 ```dart
 import 'package:valdi/valdi.dart';
 
-class MyComponent extends StatefulComponent {
-  int count = 0;
+// 1. Reactive State via Signals
+final counterSignal = Signal<int>(0);
 
+class CounterScreen extends ValdiComponent {
   @override
   ValdiComponent build() {
-    return View(
-      style: YogaStyle(
-        flexDirection: FlexDirection.column,
-        justifyContent: JustifyContent.center,
-        alignItems: AlignItems.center,
-      ),
+    return Column(
       children: [
-        Text('Counter: $count', fontSize: 20),
+        Text('Count: ${counterSignal.value}'),
         Button(
           label: 'Increment',
-          onPressed: () {
-            setState(() => count++);
-          },
+          onPressed: () => counterSignal.update((c) => c + 1),
         ),
       ],
     );
   }
 }
-```
 
-### 2. Dual-Mode Rendering & Backend Switching
+void main() {
+  final controller = ValdiRenderController();
 
-```dart
-final controller = ValdiRenderController();
-final myApp = MyComponent();
+  // Push Route to Native Navigator
+  Navigator.pushNamed('/home', () => CounterScreen());
 
-// Default Mode: Native Views (Valdi + Zero-Fork Flutter)
-controller.setRenderBackend(RenderBackend.nativeViews);
-controller.render(myApp.build());
+  // Render via Primary Native View Backend (Zero-Fork)
+  controller.setRenderBackend(RenderBackend.nativeViews);
+  controller.render(Navigator.currentRoute!.buildPage());
 
-// Switch Mode: Optional Skia Direct Canvas (DartNative Style)
-controller.setRenderBackend(RenderBackend.skiaCanvas);
-controller.render(myApp.build());
+  // Switch to Optional Skia Canvas Backend
+  controller.setRenderBackend(RenderBackend.skiaCanvas);
+  controller.render(Navigator.currentRoute!.buildPage());
+}
 ```
 
 ---

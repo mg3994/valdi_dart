@@ -1,105 +1,85 @@
 import 'package:valdi/valdi.dart';
 
-class CounterApp extends StatefulComponent {
-  int count = 0;
-
-  CounterApp({super.key});
-
-  void increment() {
-    setState(() {
-      count++;
-    });
+class ChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, LayoutRect rect) {
+    canvas.drawRect(rect, Paint(color: Color.black));
+    canvas.drawCircle(rect.width / 2, rect.height / 2, 30.0, Paint(color: Color.green));
   }
 
   @override
-  ValdiComponent build() {
-    return View(
-      key: 'root_view',
-      style: YogaStyle(
-        flexDirection: FlexDirection.column,
-        justifyContent: JustifyContent.center,
-        alignItems: AlignItems.center,
-        width: 375,
-        height: 812,
-        padding: const EdgeValues.all(20),
-      ),
-      backgroundColor: '#F5F5F7',
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+void main() async {
+  print('=== Valdi + DartNative Extended Architecture Demo ===\n');
+
+  // 1. Reactive Signal State
+  final counterSignal = Signal<int>(10);
+  print('[1] Reactive Signals: Initial Value = ${counterSignal.value}');
+  counterSignal.addListener((val) {
+    print('  -> Signal Listener Fired: counter = $val');
+  });
+  counterSignal.value = 25;
+
+  // 2. Provided Dependency Context
+  Provided.inject<String>('https://api.valdi.native');
+  print('\n[2] Provided Context: API Base URL = ${Provided.get<String>()}');
+
+  // 3. Native Navigator & Routes
+  print('\n[3] Native Navigator Routing:');
+  Navigator.pushNamed('/dashboard', () {
+    return Column(
       children: [
-        Text(
-          'Valdi + DartNative + ZeroFork',
-          key: 'title',
-          style: YogaStyle(
-            margin: const EdgeValues(bottom: 16),
-          ),
-          fontSize: 22,
-          fontWeight: 'bold',
-          color: '#1C1C1E',
+        Row(
+          children: [
+            Expanded(child: Text('Navigation Bar Title')),
+          ],
         ),
-        Text(
-          'Counter Value: $count',
-          key: 'counter_text',
-          style: YogaStyle(
-            margin: const EdgeValues(bottom: 24),
-          ),
-          fontSize: 18,
-          color: '#007AFF',
+        Stack(
+          children: [
+            Container(color: '#1C1C1E', width: 375, height: 200),
+            Positioned(
+              left: 20,
+              top: 20,
+              child: Text('Overlay Banner', color: '#FFFFFF'),
+            ),
+          ],
         ),
-        Button(
-          key: 'increment_button',
-          label: 'Increment Counter',
-          style: YogaStyle(
-            width: 200,
-            height: 48,
-          ),
-          onPressed: () {
-            increment();
-          },
+        SizedBox(height: 16),
+        CustomPaint(
+          painter: ChartPainter(),
+          style: YogaStyle(width: 300, height: 150),
+        ),
+        ListView.builder(
+          itemCount: 3,
+          itemBuilder: (i) => Text('Fast Native List Row #$i'),
         ),
       ],
     );
-  }
-}
+  });
 
-void main() {
-  print('=== Valdi Dart Cross-Platform Framework Demo ===\n');
+  print('Current Route: ${Navigator.currentRoute?.name}');
+  final rootWidget = Navigator.currentRoute!.buildPage();
 
-  final renderController = ValdiRenderController();
-  final counterApp = CounterApp();
+  // 4. Dual-Mode Rendering Pipeline
+  final controller = ValdiRenderController();
 
-  // 1. Render in Native View Mode (Valdi style with Zero-Fork Flutter)
-  print('[1] Rendering in Primary Native View Mode (Zero-Fork Flutter):');
-  renderController.setRenderBackend(RenderBackend.nativeViews);
-  renderController.render(counterApp.build());
+  print('\n[4.1] Rendering Dashboard in Native View Mode (Zero-Fork Flutter):');
+  controller.setRenderBackend(RenderBackend.nativeViews);
+  controller.render(rootWidget);
+  print('Native View Count: ${ZeroForkManager().activeNativeViews.length}');
 
-  final activeViews = ZeroForkManager().activeNativeViews;
-  print('Active Native View Handles Created: ${activeViews.length}');
-  for (final handle in activeViews.values) {
-    print('  - Native View #${handle.viewId} (${handle.viewType}) at ${handle.layout} props: ${handle.props}');
-  }
+  print('\n[4.2] Switching to Optional Skia Direct Canvas Backend (DartNative Style):');
+  controller.setRenderBackend(RenderBackend.skiaCanvas);
+  controller.render(rootWidget);
+  print('Skia Draw Commands Recorded: ${controller.skiaRenderer.recordedCommands.length}');
 
-  print('\n--------------------------------------------------\n');
+  // 5. Direct FFI Key-Value Storage
+  print('\n[5] Direct FFI Storage Execution:');
+  final storage = ValdiStorage();
+  await storage.setString('session_token', 'valdi_token_9988');
+  print('Read Token from FFI Storage: ${storage.getString('session_token')}');
 
-  // 2. State Mutation
-  print('[2] Incrementing state in CounterApp...');
-  counterApp.increment();
-  renderController.render(counterApp.build());
-
-  print('Updated Native Views after state change:');
-  for (final handle in ZeroForkManager().activeNativeViews.values) {
-    print('  - Native View #${handle.viewId} (${handle.viewType}) at ${handle.layout} props: ${handle.props}');
-  }
-
-  print('\n--------------------------------------------------\n');
-
-  // 3. Optional Direct Skia Canvas Mode Switch (DartNative style optional Skia)
-  print('[3] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative style optional Skia):');
-  renderController.setRenderBackend(RenderBackend.skiaCanvas);
-
-  final skiaCommands = renderController.skiaRenderer.recordedCommands;
-  print('Recorded Skia Draw Commands: ${skiaCommands.length}');
-  for (final cmd in skiaCommands) {
-    print('  - $cmd');
-  }
-
-  print('\n=== Demo Completed Successfully ===');
+  print('\n=== Extended Demo Completed Successfully ===');
 }
