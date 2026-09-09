@@ -2,6 +2,7 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
+/// slide/sheet route transitions, neural TTS voice configuration, background job schedulers,
 /// dynamic wallpaper color palettes, content windowing list controllers, sparkline charts,
 /// on-device vision ML inference, fluid glass shaders, shimmer placeholders, neural audio streamers,
 /// isolate processing, method channel migration bridges, controlled forms, responsive layout,
@@ -30,6 +31,7 @@ export 'src/state/signals.dart';
 export 'src/state/signal_store.dart';
 export 'src/navigation/navigator.dart';
 export 'src/navigation/search_bar.dart';
+export 'src/navigation/transitions.dart';
 export 'src/graphics/canvas.dart';
 export 'src/graphics/shaders.dart';
 export 'src/graphics/sparkline.dart';
@@ -43,6 +45,7 @@ export 'src/form/forms.dart';
 export 'src/plugin/valdi_plugin.dart';
 export 'src/plugin/platform_channel.dart';
 export 'src/isolate/isolate_bridge.dart';
+export 'src/isolate/job_scheduler.dart';
 export 'src/ml/vision_ml.dart';
 
 export 'src/animation/animation.dart';
@@ -52,6 +55,7 @@ export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
 export 'src/media/audio_engine.dart';
 export 'src/media/neural_audio.dart';
+export 'src/media/voice_config.dart';
 export 'src/platform/platform_services.dart';
 
 export 'src/devtools/inspector.dart';
