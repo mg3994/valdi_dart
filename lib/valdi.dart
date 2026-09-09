@@ -2,7 +2,8 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
-/// reactive signals, native routing, gestures, SQLite & secure keychain database, social auth sheets,
+/// reactive signals & signal stores, native routing, gestures, accessibility semantics,
+/// SQLite & secure keychain database, social auth sheets, FFI networking, system localizations,
 /// camera & Lottie sticker engines, and optional Skia direct canvas rendering.
 library valdi;
 
@@ -17,11 +18,15 @@ export 'src/component/list_view.dart';
 export 'src/component/grid_view.dart';
 export 'src/reconciler/reconciler.dart';
 
+export 'src/accessibility/semantics.dart';
 export 'src/gesture/gestures.dart';
 export 'src/state/signals.dart';
+export 'src/state/signal_store.dart';
 export 'src/navigation/navigator.dart';
 export 'src/navigation/search_bar.dart';
 export 'src/graphics/canvas.dart';
+export 'src/network/http_client.dart';
+export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
 export 'src/storage/database.dart';
 export 'src/auth/auth_widgets.dart';

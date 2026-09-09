@@ -11,87 +11,91 @@ class ChartPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
+class AddCounterAction extends Action {
+  AddCounterAction(int delta) : super('ADD', delta);
+}
+
 void main() async {
-  print('=== Valdi + DartNative Full Platform Architecture Showcase ===\n');
+  print('=== Valdi + DartNative Enterprise Architecture Showcase ===\n');
 
-  // 1. Reactive Signal State Management
-  final counterSignal = Signal<int>(10);
-  print('[1] Reactive Signals: Initial Value = ${counterSignal.value}');
-  counterSignal.addListener((val) {
-    print('  -> Signal Listener Fired: counter = $val');
-  });
-  counterSignal.value = 25;
+  // 1. SignalStore State Management
+  print('[1] Centralized SignalStore State Management:');
+  final store = SignalStore<int>(
+    initialState: 100,
+    reducer: (state, action) {
+      if (action.type == 'ADD') {
+        return state + (action.payload as int);
+      }
+      return state;
+    },
+  );
+  store.addListener((st) => print('  -> SignalStore State Updated: $st'));
+  store.dispatch(AddCounterAction(50));
 
-  // 2. Local Database & Secure Storage (SQLite & Keychain)
-  print('\n[2] Local Database & Secure Keychain over Direct FFI:');
-  final keychain = KeychainStore();
-  await keychain.writeSecure('user_session', 'session_secret_9988');
-  print('Read Secure Token from Keychain: ${await keychain.readSecure('user_session')}');
+  // 2. Direct FFI HTTP Client & System i18n Localizations
+  print('\n[2] Direct FFI HTTP Client & System i18n Bridge:');
+  final httpClient = ValdiHttpClient();
+  final httpRes = await httpClient.get('https://api.valdi.native/feed');
+  print('FFI HTTP Response Status: ${httpRes.statusCode}');
 
-  final db = SQLiteStore('valdi_app.db');
-  await db.execute('CREATE TABLE IF NOT EXISTS analytics (event TEXT)');
-  await db.insert('analytics', {'event': 'app_launch'});
-  print('SQLite Rows Inserted & Queried: ${await db.query('analytics')}');
+  final i18n = ValdiLocalizations(
+    translations: {
+      'en': {'app_title': 'Valdi Enterprise Native Suite'},
+      'es': {'app_title': 'Suite Empresarial Valdi'},
+    },
+  );
+  await i18n.fetchSystemLocale();
+  print('Translated Header (${i18n.currentLocale}): ${i18n.translate('app_title')}');
 
-  // 3. Interactive Gestures, Social Auth, Camera & SearchBar Navigation
-  print('\n[3] Interactive Gestures, Social Auth, & Native Navigation:');
-  Navigator.pushNamed('/dashboard', () {
-    return GestureDetector(
-      onTap: () => print('  -> Interactive View Tapped!'),
-      child: Column(
-        children: [
-          SearchAppBar(
-            title: 'Valdi Native Suite',
-            searchBar: SearchBar(placeholder: 'Search suite capabilities...'),
-          ),
-          AppleSignInButton(
-            onSuccess: (token) => print('  -> Apple Sign-In Succeeded: $token'),
-          ),
-          GoogleSignInButton(
-            onSuccess: (token) => print('  -> Google Sign-In Succeeded: $token'),
-          ),
-          MasonryGridView(
-            crossAxisCount: 2,
-            itemCount: 2,
-            itemBuilder: (i) => Container(
-              height: 120,
-              child: Text('Masonry Tile #$i'),
+  // 3. Accessibility Semantics, Interactive Gestures, & Navigation
+  print('\n[3] Accessibility Semantics, Interactive Gestures, & Native Navigation:');
+  Navigator.pushNamed('/enterprise', () {
+    return Semantics(
+      label: 'Main Dashboard',
+      hint: 'Contains enterprise native controls',
+      child: GestureDetector(
+        onTap: () => print('  -> Accessibility Container Tapped!'),
+        child: Column(
+          children: [
+            SearchAppBar(
+              title: i18n.translate('app_title'),
+              searchBar: SearchBar(placeholder: 'Search enterprise features...'),
             ),
-          ),
-          CameraView(),
-          LottieStickerGrid(stickerUrls: [
-            'assets/sticker1.json',
-            'assets/sticker2.json',
-          ]),
-          CustomPaint(
-            painter: ChartPainter(),
-            style: YogaStyle(width: 300, height: 100),
-          ),
-        ],
+            AppleSignInButton(
+              onSuccess: (token) => print('  -> Apple Auth Token: $token'),
+            ),
+            MasonryGridView(
+              crossAxisCount: 2,
+              itemCount: 2,
+              itemBuilder: (i) => Container(
+                height: 120,
+                child: Text('Masonry Tile #$i'),
+              ),
+            ),
+            CustomPaint(
+              painter: ChartPainter(),
+              style: YogaStyle(width: 300, height: 100),
+            ),
+          ],
+        ),
       ),
     );
   });
 
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  // 4. Camera Controller Execution over FFI
-  print('\n[4] Camera Controller Operations over FFI:');
-  final cameraController = CameraController();
-  await cameraController.takePhoto();
-  await cameraController.toggleFlash();
-
-  // 5. Dual-Mode Rendering (Native Views Default + Optional Skia Backend Switch)
+  // 4. Dual-Mode Rendering Pipeline
   final controller = ValdiRenderController();
 
-  print('\n[5.1] Rendering Suite in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Enterprise Suite in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
 
-  print('\n[5.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
+  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
   controller.setRenderBackend(RenderBackend.skiaCanvas);
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  print('\n=== Full Platform Architecture Showcase Completed Successfully ===');
+  print('\n=== Enterprise Architecture Showcase Completed Successfully ===');
 }
