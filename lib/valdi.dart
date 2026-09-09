@@ -2,7 +2,8 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
-/// background isolate execution, method channel migration bridges, controlled forms, responsive layout,
+/// fluid glass shaders, shimmer placeholders, neural audio streamers, isolate processing,
+/// method channel migration bridges, controlled forms, responsive layout,
 /// reactive signals & signal stores, native routing, gestures, accessibility semantics,
 /// SQLite & secure keychain database, social auth sheets, FFI networking, system localizations,
 /// camera & Lottie sticker engines, DevTools inspector, frame profiler, hot reload, and optional Skia direct canvas rendering.
@@ -18,6 +19,7 @@ export 'src/component/builder.dart';
 export 'src/component/flutter_widgets.dart';
 export 'src/component/list_view.dart';
 export 'src/component/grid_view.dart';
+export 'src/component/shimmer.dart';
 export 'src/reconciler/reconciler.dart';
 
 export 'src/accessibility/semantics.dart';
@@ -27,6 +29,7 @@ export 'src/state/signal_store.dart';
 export 'src/navigation/navigator.dart';
 export 'src/navigation/search_bar.dart';
 export 'src/graphics/canvas.dart';
+export 'src/graphics/shaders.dart';
 export 'src/network/http_client.dart';
 export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
@@ -43,6 +46,7 @@ export 'src/theme/material.dart';
 export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
 export 'src/media/audio_engine.dart';
+export 'src/media/neural_audio.dart';
 export 'src/platform/platform_services.dart';
 
 export 'src/devtools/inspector.dart';
