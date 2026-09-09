@@ -1,39 +1,60 @@
 import 'package:valdi/valdi.dart';
 
 void main() async {
-  print('=== Valdi + DartNative Ultra Performance Showcase ===\n');
+  print('=== Valdi + DartNative Cutting-Edge Glass & Map Suite Showcase ===\n');
 
-  // 1. Zero-Copy HW Video Texture Streamer over FFI
-  print('[1] Registering Zero-Copy Hardware Video Texture Streamer:');
-  final textureStreamer = VideoTextureStreamer();
-  final textureId = await textureStreamer.registerTexture('https://cdn.valdi.native/live_4k_stream.mp4');
-  print('  -> Registered Native HW Texture ID: $textureId');
+  // 1. Rich Avatar Chat Banner Notifications over FFI
+  print('[1] Triggering Native Chat Banner Notification over FFI:');
+  final bannerNotifier = ChatBannerNotification();
+  await bannerNotifier.showChatBanner(const NotificationPayload(
+    senderName: 'Sarah Connor',
+    avatarUrl: 'https://cdn.valdi.native/avatars/sarah.jpg',
+    messageBody: 'Valdi framework running natively on OS!',
+  ));
+  print('  -> Chat Banner Notification dispatched to native OS.');
 
-  // 2. Real-time Native Bi-directional Event Stream Sockets
-  print('\n[2] Listening to Native Bi-directional Event Stream Sockets over FFI:');
-  final eventStream = ValdiEventStream<String>('device_telemetry');
-  eventStream.stream.listen((ev) => print('  -> Native Event Stream Received: "$ev"'));
-  eventStream.emit('battery_level:98%,temp:32C');
+  // 2. Native Map SDK Controller & Interactive Markers
+  print('\n[2] Native Map SDK Camera Update & Interactive Marker Placement:');
+  final mapController = MapOverlayController();
+  await mapController.addMarker(const MapMarker(
+    markerId: 'valdi_hq',
+    latitude: 37.7749,
+    longitude: -122.4194,
+    title: 'Valdi Headquarters',
+  ));
+  await mapController.animateCamera(const MapCameraUpdate(
+    latitude: 37.7749,
+    longitude: -122.4194,
+    zoom: 17.5,
+  ));
+  print('  -> Native Map Marker placed & Camera Animated.');
 
-  // 3. Multi-Line Flexbox Wrap Layout & UI Rendering
-  print('\n[3] Constructing Multi-Line Flexbox Wrap Layout:');
-  Navigator.pushNamed('/ultra_feed', () {
+  // 3. iOS 26 Clear Large Title Bar & Fluid Glass Merge UI
+  print('\n[3] Constructing Clear Title Bar & Fluid Glass Merge Effect UI:');
+  Navigator.pushNamed('/map_suite', () {
     return Column(
       children: [
-        SearchAppBar(
-          title: 'Ultra Performance Suite',
-          searchBar: SearchBar(placeholder: 'Search ultra tags...'),
+        ClearTitleBar(
+          title: 'Explore Native World',
+          leading: Text('◄ Menu'),
         ),
-        Wrap(
-          direction: FlexDirection.row,
-          alignment: JustifyContent.spaceAround,
-          children: [
-            Container(padding: const EdgeValues.all(8), color: '#007AFF', child: Text('Chip #1')),
-            Container(padding: const EdgeValues.all(8), color: '#34C759', child: Text('Chip #2')),
-            Container(padding: const EdgeValues.all(8), color: '#FF9500', child: Text('Chip #3')),
+        LiquidGlassMerge(
+          glassNodes: [
+            LiquidGlass(
+              child: Text('Card #1: Fluid Blur Node'),
+            ),
+            LiquidGlass(
+              child: Text('Card #2: Fluid Glass Merge Node'),
+            ),
           ],
         ),
-        VideoPlayer(url: 'https://cdn.valdi.native/live_4k_stream.mp4'),
+        MapOverlay(
+          child: Container(
+            color: '#1C1C1E',
+            padding: const EdgeValues.all(12),
+            child: Text('Floating Map Card Over SDK', color: '#FFFFFF'),
+          ),
+        ),
       ],
     );
   });
@@ -43,7 +64,7 @@ void main() async {
   // 4. Dual-Mode Rendering Pipeline
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Ultra Suite in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Glass & Map Suite in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
@@ -53,7 +74,5 @@ void main() async {
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  await textureStreamer.releaseTexture();
-  await eventStream.close();
-  print('\n=== Ultra Performance Showcase Completed Successfully ===');
+  print('\n=== Cutting-Edge Glass & Map Suite Showcase Completed Successfully ===');
 }

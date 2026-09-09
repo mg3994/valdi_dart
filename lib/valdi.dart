@@ -2,8 +2,9 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
-/// multi-line flex wrapping, zero-copy HW video texture streaming, native event streams,
-/// tab bars & bottom navigation, paginated infinite lists, OS app lifecycle observers,
+/// fluid glass merge effects, clear large title bars, chat avatar banner notifications,
+/// native map markers & camera updates, multi-line flex wrapping, zero-copy HW video texture streaming,
+/// native event streams, tab bars & bottom navigation, paginated infinite lists, OS app lifecycle observers,
 /// image memory caching, real-time FFI WebSockets, biometric authentication (FaceID/TouchID),
 /// slide/sheet route transitions, neural TTS voice configuration, background job schedulers,
 /// dynamic wallpaper color palettes, content windowing list controllers, sparkline charts,
@@ -60,8 +61,10 @@ export 'src/ml/vision_ml.dart';
 export 'src/animation/animation.dart';
 export 'src/theme/material.dart';
 export 'src/theme/dynamic_color.dart';
+export 'src/theme/glass_effects.dart';
 export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
+export 'src/media/map_extensions.dart';
 export 'src/media/image_cache.dart';
 export 'src/media/video_texture.dart';
 export 'src/media/audio_engine.dart';
@@ -69,6 +72,7 @@ export 'src/media/neural_audio.dart';
 export 'src/media/voice_config.dart';
 export 'src/platform/platform_services.dart';
 export 'src/platform/app_lifecycle.dart';
+export 'src/platform/rich_notifications.dart';
 
 export 'src/devtools/inspector.dart';
 export 'src/devtools/profiler.dart';
