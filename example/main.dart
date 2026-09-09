@@ -12,7 +12,7 @@ class ChartPainter extends CustomPainter {
 }
 
 void main() async {
-  print('=== Valdi + DartNative Comprehensive Showcase ===\n');
+  print('=== Valdi + DartNative Extended Capabilities Showcase ===\n');
 
   // 1. Reactive Signal State Management
   final counterSignal = Signal<int>(10);
@@ -22,58 +22,48 @@ void main() async {
   });
   counterSignal.value = 25;
 
-  // 2. Animations & Hero Transition
-  print('\n[2] Animation Controller & Hero Transitions:');
-  final animController = AnimationController(durationSeconds: 0.3);
-  animController.addListener(() {
-    print('  -> Animation Frame Value: ${animController.value}');
-  });
-  animController.forward();
-
-  // 3. Native Navigator & Advanced Widgets (LiquidGlass, VideoPlayer, Hero, Lottie)
-  print('\n[3] Native Navigator Routing & Advanced UI Components:');
-  Navigator.pushNamed('/dashboard', () {
-    return LiquidGlass(
-      tintColor: '#ffffff44',
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: M3Badge(
-                  label: 'NEW',
-                  child: Text('Navigation Header'),
-                ),
-              ),
-            ],
+  // 2. SearchBar Choreography & Native Navigator
+  print('\n[2] Search Bar Choreography & Native Routing:');
+  Navigator.pushNamed('/photos', () {
+    return Column(
+      children: [
+        SearchAppBar(
+          title: 'Photo Gallery',
+          searchBar: SearchBar(placeholder: 'Search high-res photos...'),
+        ),
+        MasonryGridView(
+          crossAxisCount: 2,
+          itemCount: 4,
+          itemBuilder: (index) => Container(
+            height: (index % 2 == 0) ? 140.0 : 200.0,
+            child: Text('Masonry Photo Card #$index'),
           ),
-          Hero(
-            tag: 'profile_avatar',
-            child: Container(width: 80, height: 80, color: '#007AFF'),
-          ),
-          VideoPlayer(url: 'https://cdn.valdi.native/sample.mp4'),
-          LottieView(assetPath: 'assets/lottie_success.json'),
-          MapView(latitude: 37.7749, longitude: -122.4194),
-          CustomPaint(
-            painter: ChartPainter(),
-            style: YogaStyle(width: 300, height: 100),
-          ),
-          ListView.builder(
-            itemCount: 2,
-            itemBuilder: (i) => Text('Native Row Item #$i'),
-          ),
-        ],
-      ),
+        ),
+        Hero(
+          tag: 'profile_avatar',
+          child: Container(width: 80, height: 80, color: '#007AFF'),
+        ),
+        VideoPlayer(url: 'https://cdn.valdi.native/sample.mp4'),
+        CustomPaint(
+          painter: ChartPainter(),
+          style: YogaStyle(width: 300, height: 100),
+        ),
+      ],
     );
   });
 
-  print('Current Active Route: ${Navigator.currentRoute?.name}');
+  print('Active Route Name: ${Navigator.currentRoute?.name}');
   final rootWidget = Navigator.currentRoute!.buildPage();
+
+  // 3. Audio Player Engine
+  print('\n[3] Native Audio Engine Execution:');
+  final audioPlayer = AudioPlayer();
+  await audioPlayer.play('https://cdn.valdi.native/stream.mp3');
 
   // 4. Dual-Mode Rendering (Native Views Default + Optional Skia Backend Switch)
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Dashboard in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Photo Gallery in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
@@ -83,15 +73,14 @@ void main() async {
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  // 5. Platform Capabilities Services over FFI (Notifications & AuthService)
+  // 5. Platform Capabilities Services over FFI
   print('\n[5] Platform Capabilities Services over Dynamic FFI Bridge:');
   final notifications = NotificationManager();
   await notifications.requestPermissions();
-  await notifications.showLocalNotification('Valdi Framework', 'Welcome to Valdi Cross-Platform Engine!');
+  await notifications.showLocalNotification('Valdi Framework', 'Photo gallery loaded successfully!');
 
-  final auth = AuthService();
-  final authResult = await auth.signInWithApple();
-  print('Apple Sign-In Response over FFI: $authResult');
+  final tts = TextToSpeechEngine();
+  await tts.speak('Photo gallery loaded smoothly');
 
-  print('\n=== Comprehensive Showcase Completed Successfully ===');
+  print('\n=== Extended Showcase Completed Successfully ===');
 }

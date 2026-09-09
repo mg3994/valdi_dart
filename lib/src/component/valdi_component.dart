@@ -12,7 +12,13 @@ abstract class ValdiComponent {
   ValdiComponent build();
 
   /// Returns underlying YogaNode representation.
-  YogaNode toYogaNode();
+  YogaNode toYogaNode() {
+    final built = build();
+    if (built != this) {
+      return built.toYogaNode();
+    }
+    return YogaNode(style: style);
+  }
 }
 
 /// Abstract stateful component with state management capabilities.

@@ -1,8 +1,7 @@
 import 'valdi_component.dart';
+import 'builder.dart';
 import '../layout/yoga_node.dart';
 import '../layout/yoga_style.dart';
-
-typedef IndexedWidgetBuilder = ValdiComponent Function(int index);
 
 /// High-performance windowed native list component inspired by DartNative fast lists (UITableView/RecyclerView backing).
 class ListView extends ValdiComponent {
