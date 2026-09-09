@@ -1,45 +1,48 @@
 import 'package:valdi/valdi.dart';
 
 void main() async {
-  print('=== Valdi + DartNative Next-Gen Architecture Showcase ===\n');
+  print('=== Valdi + DartNative Enterprise Realtime Suite Showcase ===\n');
 
-  // 1. On-Device SuperTonic-3 Neural TTS Voice Configuration
-  print('[1] Configuring On-Device SuperTonic-3 Neural Voice Model over FFI:');
-  final voiceConfig = NeuralVoiceConfig();
-  final targetVoice = NeuralVoiceConfig.availableVoices.first;
-  await voiceConfig.setVoiceModel(targetVoice);
-  print('  -> Selected Voice: ${targetVoice.name} (${targetVoice.languageCode})');
+  // 1. Biometric Authentication over FFI (FaceID / TouchID)
+  print('[1] Authenticating User via FaceID / TouchID Biometrics over FFI:');
+  final biometrics = BiometricAuth();
+  if (await biometrics.isBiometricsAvailable()) {
+    final bioSuccess = await biometrics.authenticate(reason: 'Access Valdi Secure Vault');
+    print('  -> Biometric Authentication Result: $bioSuccess');
+  }
 
-  // 2. Periodic & Deferred Background Job Scheduler
-  print('\n[2] Background Worker Thread & Job Scheduler Execution:');
-  JobScheduler.schedulePeriodicJob('sync_telemetry_job', const Duration(minutes: 15), () {
-    print('  -> Background Sync Telemetry Job Fired on Schedule.');
-  });
-  final workerResult = await ValdiWorkerThread.executeWork(() => 500 * 20);
-  print('  -> ValdiWorkerThread Computed Task Result: $workerResult');
+  // 2. Real-time Bi-directional WebSockets over FFI
+  print('\n[2] Connecting Real-time FFI WebSocket:');
+  final ws = ValdiWebSocket('wss://realtime.valdi.native/feed');
+  ws.stream.listen((msg) => print('  -> WebSocket Stream Received Message: "$msg"'));
+  await ws.connect();
+  ws.send('ping');
+  NativeBridge().handleNativeEvent('ValdiWebSocket.onMessage', ['{"type": "connected", "status": "online"}']);
 
-  // 3. Native Navigation Transitions (Slide-up Modal Sheet & Gesture Choreography)
-  print('\n[3] Pushing Slide-Up Sheet Route Transition to Native Navigator:');
-  Navigator.push(SheetRouteTransition(
-    name: '/modal_sheet',
-    builder: () => Column(
+  // 3. Fast LRU In-Memory Image Cache & NetworkImageView
+  print('\n[3] In-Memory LRU Image Caching & NetworkImageView:');
+  ValdiImageCache.cacheImage('https://cdn.valdi.native/photo1.jpg', '/var/cache/photo1_cached.jpg');
+  print('  -> Image Cache Lookup: ${ValdiImageCache.getCachedPath('https://cdn.valdi.native/photo1.jpg')}');
+
+  Navigator.pushNamed('/realtime_vault', () {
+    return Column(
       children: [
         SearchAppBar(
-          title: 'Sheet Modal Title',
-          searchBar: SearchBar(placeholder: 'Search modal content...'),
+          title: 'Secure Realtime Vault',
+          searchBar: SearchBar(placeholder: 'Search secure vault...'),
         ),
-        Text('Modal Sheet Page Content'),
+        NetworkImageView(url: 'https://cdn.valdi.native/photo1.jpg'),
+        Text('Vault Secured with FaceID & Realtime WebSocket Sync'),
       ],
-    ),
-  ));
+    );
+  });
 
-  print('Active Route Name: ${Navigator.currentRoute?.name}');
   final rootWidget = Navigator.currentRoute!.buildPage();
 
   // 4. Dual-Mode Rendering Pipeline
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Sheet Modal in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[4.1] Rendering Realtime Vault in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
@@ -49,5 +52,6 @@ void main() async {
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  print('\n=== Next-Gen Architecture Showcase Completed Successfully ===');
+  await ws.close();
+  print('\n=== Enterprise Realtime Suite Showcase Completed Successfully ===');
 }

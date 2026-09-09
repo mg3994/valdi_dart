@@ -2,6 +2,7 @@
 ///
 /// A cross-platform declarative UI framework for Dart featuring Yoga flexbox layout,
 /// zero-fork Flutter / native view binding (Valdi style), dynamic FFI interop (DartNative style),
+/// image memory caching, real-time FFI WebSockets, biometric authentication (FaceID/TouchID),
 /// slide/sheet route transitions, neural TTS voice configuration, background job schedulers,
 /// dynamic wallpaper color palettes, content windowing list controllers, sparkline charts,
 /// on-device vision ML inference, fluid glass shaders, shimmer placeholders, neural audio streamers,
@@ -36,10 +37,12 @@ export 'src/graphics/canvas.dart';
 export 'src/graphics/shaders.dart';
 export 'src/graphics/sparkline.dart';
 export 'src/network/http_client.dart';
+export 'src/network/websocket.dart';
 export 'src/i18n/localizations.dart';
 export 'src/storage/valdi_storage.dart';
 export 'src/storage/database.dart';
 export 'src/auth/auth_widgets.dart';
+export 'src/auth/biometrics.dart';
 export 'src/form/forms.dart';
 
 export 'src/plugin/valdi_plugin.dart';
@@ -53,6 +56,7 @@ export 'src/theme/material.dart';
 export 'src/theme/dynamic_color.dart';
 export 'src/media/media_widgets.dart';
 export 'src/media/media_extensions.dart';
+export 'src/media/image_cache.dart';
 export 'src/media/audio_engine.dart';
 export 'src/media/neural_audio.dart';
 export 'src/media/voice_config.dart';
