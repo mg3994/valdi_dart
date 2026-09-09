@@ -12,7 +12,7 @@ class ChartPainter extends CustomPainter {
 }
 
 void main() async {
-  print('=== Valdi + DartNative Extended Capabilities Showcase ===\n');
+  print('=== Valdi + DartNative Full Platform Architecture Showcase ===\n');
 
   // 1. Reactive Signal State Management
   final counterSignal = Signal<int>(10);
@@ -22,65 +22,76 @@ void main() async {
   });
   counterSignal.value = 25;
 
-  // 2. SearchBar Choreography & Native Navigator
-  print('\n[2] Search Bar Choreography & Native Routing:');
-  Navigator.pushNamed('/photos', () {
-    return Column(
-      children: [
-        SearchAppBar(
-          title: 'Photo Gallery',
-          searchBar: SearchBar(placeholder: 'Search high-res photos...'),
-        ),
-        MasonryGridView(
-          crossAxisCount: 2,
-          itemCount: 4,
-          itemBuilder: (index) => Container(
-            height: (index % 2 == 0) ? 140.0 : 200.0,
-            child: Text('Masonry Photo Card #$index'),
+  // 2. Local Database & Secure Storage (SQLite & Keychain)
+  print('\n[2] Local Database & Secure Keychain over Direct FFI:');
+  final keychain = KeychainStore();
+  await keychain.writeSecure('user_session', 'session_secret_9988');
+  print('Read Secure Token from Keychain: ${await keychain.readSecure('user_session')}');
+
+  final db = SQLiteStore('valdi_app.db');
+  await db.execute('CREATE TABLE IF NOT EXISTS analytics (event TEXT)');
+  await db.insert('analytics', {'event': 'app_launch'});
+  print('SQLite Rows Inserted & Queried: ${await db.query('analytics')}');
+
+  // 3. Interactive Gestures, Social Auth, Camera & SearchBar Navigation
+  print('\n[3] Interactive Gestures, Social Auth, & Native Navigation:');
+  Navigator.pushNamed('/dashboard', () {
+    return GestureDetector(
+      onTap: () => print('  -> Interactive View Tapped!'),
+      child: Column(
+        children: [
+          SearchAppBar(
+            title: 'Valdi Native Suite',
+            searchBar: SearchBar(placeholder: 'Search suite capabilities...'),
           ),
-        ),
-        Hero(
-          tag: 'profile_avatar',
-          child: Container(width: 80, height: 80, color: '#007AFF'),
-        ),
-        VideoPlayer(url: 'https://cdn.valdi.native/sample.mp4'),
-        CustomPaint(
-          painter: ChartPainter(),
-          style: YogaStyle(width: 300, height: 100),
-        ),
-      ],
+          AppleSignInButton(
+            onSuccess: (token) => print('  -> Apple Sign-In Succeeded: $token'),
+          ),
+          GoogleSignInButton(
+            onSuccess: (token) => print('  -> Google Sign-In Succeeded: $token'),
+          ),
+          MasonryGridView(
+            crossAxisCount: 2,
+            itemCount: 2,
+            itemBuilder: (i) => Container(
+              height: 120,
+              child: Text('Masonry Tile #$i'),
+            ),
+          ),
+          CameraView(),
+          LottieStickerGrid(stickerUrls: [
+            'assets/sticker1.json',
+            'assets/sticker2.json',
+          ]),
+          CustomPaint(
+            painter: ChartPainter(),
+            style: YogaStyle(width: 300, height: 100),
+          ),
+        ],
+      ),
     );
   });
 
-  print('Active Route Name: ${Navigator.currentRoute?.name}');
   final rootWidget = Navigator.currentRoute!.buildPage();
 
-  // 3. Audio Player Engine
-  print('\n[3] Native Audio Engine Execution:');
-  final audioPlayer = AudioPlayer();
-  await audioPlayer.play('https://cdn.valdi.native/stream.mp3');
+  // 4. Camera Controller Execution over FFI
+  print('\n[4] Camera Controller Operations over FFI:');
+  final cameraController = CameraController();
+  await cameraController.takePhoto();
+  await cameraController.toggleFlash();
 
-  // 4. Dual-Mode Rendering (Native Views Default + Optional Skia Backend Switch)
+  // 5. Dual-Mode Rendering (Native Views Default + Optional Skia Backend Switch)
   final controller = ValdiRenderController();
 
-  print('\n[4.1] Rendering Photo Gallery in Primary Native View Mode (Zero-Fork Flutter):');
+  print('\n[5.1] Rendering Suite in Primary Native View Mode (Zero-Fork Flutter):');
   controller.setRenderBackend(RenderBackend.nativeViews);
   controller.render(rootWidget);
   print('Active Native Views Created: ${ZeroForkManager().activeNativeViews.length}');
 
-  print('\n[4.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
+  print('\n[5.2] Switching Rendering Backend to Direct Skia Canvas Mode (DartNative Style Optional Skia):');
   controller.setRenderBackend(RenderBackend.skiaCanvas);
   controller.render(rootWidget);
   print('Recorded Skia Direct Canvas Draw Commands: ${controller.skiaRenderer.recordedCommands.length}');
 
-  // 5. Platform Capabilities Services over FFI
-  print('\n[5] Platform Capabilities Services over Dynamic FFI Bridge:');
-  final notifications = NotificationManager();
-  await notifications.requestPermissions();
-  await notifications.showLocalNotification('Valdi Framework', 'Photo gallery loaded successfully!');
-
-  final tts = TextToSpeechEngine();
-  await tts.speak('Photo gallery loaded smoothly');
-
-  print('\n=== Extended Showcase Completed Successfully ===');
+  print('\n=== Full Platform Architecture Showcase Completed Successfully ===');
 }
